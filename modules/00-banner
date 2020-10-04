@@ -5,3 +5,6 @@ source "$BASE_DIR/framework.sh"
 hostname=${HOSTNAME:-$(hostname)}
 
 print_columns "" "${CA}$(figlet $hostname)${CN}"
+print_columns "" "${CA}$(figlet $hostname)${CN}"
+print_columns "" "${CA}$(figlet -f future 'Mantained by adsanz')${CN}"
+print_columns "" "${CA}$(figlet -f term 'By accessing the server you assure that your intentions are not bad, otherwise your actions WILL BE tracked and legal action will be taken')${CN}"
