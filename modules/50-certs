@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+source "$BASE_DIR/framework.sh"
+
+ssl_domains=${module_ssl_domains:="smartlifting.es google.es"}
+
+currentTime=$(date +%s)
+output="Status|            TLS certs|            Valid until"
+
+for domain in $ssl_domains; do
+    certTime=$(openssl s_client -servername ${domain} -connect ${domain}:443 < /dev/null 2>/dev/null | openssl x509 -noout -enddate 2>/dev/null | cut -d= -f2)
+    certLineTime=$(date -d "${certTime}" +"%a %b %d %Y")
+
+    certTimestamp=$(date -d "${certTime}" +%s)
+    if [ "${certTimestamp}" -ge "${currentTime}" ]; then
+        sign="${CO}OK${CN}"
+    else
+        sign="${CE}EXPIRED${CN}"
+    fi
+
+    output+="\n$sign|  $domain|  $certLineTime"
+done
+
+print_columns "SSL Certs" "${output}" | column -t -s '|'
